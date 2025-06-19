@@ -1,0 +1,25 @@
+name: build-widget
+on:
+  push:
+    branches: [ main ]          # jedes Mal bauen, wenn du nach main pushst
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # Node + pnpm einrichten (du kannst npm beibehalten, ändert nichts)
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - run: pnpm install
+      - run: pnpm run build      # erzeugt dist/chat-widget.js
+
+      # Artefakt an jsDelivr ausliefern (weil die Datei im Repo landet)
+      - run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dist/chat-widget.js
+          git commit -m "Build widget" || echo "nothing to commit"
+          git push
