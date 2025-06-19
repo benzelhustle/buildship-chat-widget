@@ -17,9 +17,12 @@ jobs:
       - run: pnpm run build      # erzeugt dist/chat-widget.js
 
       # Artefakt an jsDelivr ausliefern (weil die Datei im Repo landet)
-      - run: |
+      # dist-Ordner ins Repo committen (alle erzeugten Dateien)
+      - name: Commit dist folder
+        run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dist/chat-widget.js
+          git add dist                      # <– GANZEN dist-Ordner
           git commit -m "Build widget" || echo "nothing to commit"
           git push
+
